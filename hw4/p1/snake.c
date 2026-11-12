@@ -188,12 +188,9 @@ void snakeDestroy(Snake *snake) {
 
 unsigned int nextRandom(unsigned int seed) {
     static unsigned int state = RANDOM_INITIAL_SEED;
-    if (seed == 0)
-        return seed;
-    else if(seed > 0){
+    if (seed > 0) {
         state = seed % RANDOM_MODULUS;
-        state = (RANDOM_MULTIPLIER * state + RANDOM_INCREMENT) % RANDOM_MODULUS;
-        return state;
     }
-    return seed;
+    state = (RANDOM_MULTIPLIER * state + RANDOM_INCREMENT) % RANDOM_MODULUS;
+    return state;
 }
