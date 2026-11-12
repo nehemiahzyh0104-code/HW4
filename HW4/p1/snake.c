@@ -16,7 +16,7 @@ static void freeRing(SnakeNode *head) {
 }
 
 static Direction effectiveDirection(const Snake *snake, Direction requested) {
-    if ((int)requested < 0 || requested > DIRECTION_COUNT) {
+    if ((int)requested < 0 || requested >= DIRECTION_COUNT) {
         return snake->m_direction;
     } else {
         switch ((int)requested) {
@@ -63,7 +63,7 @@ bool snakeInit(Snake *snake, int rows, int cols, size_t length) {
         for (size_t i = 1; i < length; i++) {
             SnakeNode *node = malloc(sizeof(*node));
             if (node == NULL) {
-                freeRing(node);
+                freeRing(head);
                 *snake = (Snake){0};
                 return false;
             }
@@ -188,9 +188,11 @@ void snakeDestroy(Snake *snake) {
 
 unsigned int nextRandom(unsigned int seed) {
     static unsigned int state = RANDOM_INITIAL_SEED;
-    if (seed > 0) {
+    if (seed == 0)
+        return seed;
+    else if(seed > 0){
         state = seed % RANDOM_MODULUS;
-        state = (RANDOM_MULTIPLIER * state + RANDOM_INCREMENT) & RANDOM_MODULUS;
+        state = (RANDOM_MULTIPLIER * state + RANDOM_INCREMENT) % RANDOM_MODULUS;
         return state;
     }
     return seed;
